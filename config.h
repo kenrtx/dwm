@@ -82,7 +82,7 @@ static const char *playprev[]  = { "playerctl", "prev", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_space,  spawn,          {.v = dmenucmd } },
 	{ MODKEY,			XK_t,	   spawn,          {.v = termcmd } },
 	{ MODKEY,			XK_w,	   spawn,	   {.v = browser } },
 	{ MODKEY,			XK_s,	   spawn,	   {.v = screenshot } },
@@ -101,8 +101,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY|ShiftMask,		XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY|ShiftMask,		XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	{ MODKEY,                       XK_p,	   setlayout,      {0} },
+	{ MODKEY|ShiftMask,             XK_p,	   togglefloating, {0} },
 	{ MODKEY,	                XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },

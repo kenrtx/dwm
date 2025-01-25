@@ -34,7 +34,6 @@ static const Rule rules[] = {
 	 */
 	/* class     		 instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",    		 NULL,       NULL,       0,            1,           -1 },
-	/* { "Firefox",	 	 NULL,       NULL,       1 << 8,       0,           -1 }, */
 	{ "Enpass",		 NULL,       NULL,       0,            1,	    -1 },		
 	{ "Gnome-calculator",	 NULL,       NULL,       0,            1,	    -1 },		
 	{ "Lxappearance",	 NULL,       NULL,       0,            1,	    -1 },		
@@ -42,9 +41,9 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const float mfact	= 0.55; /* factor of master area size [0.05..0.95] */
+static const int nmaster	= 1; /* number of clients in master area */
+static const int resizehints	= 1; /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
@@ -67,25 +66,28 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]   = { "kitty", NULL };
-static const char *browser[]   = { "brave", NULL };
+/* static const char *dmenucmd[]	= { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL }; */
+static const char *dmenucmd[] 	= { "j4-dmenu-desktop", NULL };
+static const char *termcmd[]	= { "kitty", NULL };
+static const char *browser[]	= { "brave", "--enable-features=UseOzonePlatform", "--ozone-platform=x11", NULL };
+static const char *screenshot[] = { "/home/ken/.config/dwm/scripts/screenshot.sh", NULL };
 
 /* media commands */
 static const char *upvol[]     = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL };
 static const char *downvol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL };
 static const char *mutevol[]   = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
 static const char *playpause[] = { "playerctl", "play-pause", NULL };
-static const char *playnext[] = { "playerctl", "next", NULL };
-static const char *playprev[] = { "playerctl", "prev", NULL };
+static const char *playnext[]  = { "playerctl", "next", NULL };
+static const char *playprev[]  = { "playerctl", "prev", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,	                XK_t,	   spawn,          {.v = termcmd } },
+	{ MODKEY,			XK_t,	   spawn,          {.v = termcmd } },
 	{ MODKEY,			XK_w,	   spawn,	   {.v = browser } },
+	{ MODKEY,			XK_s,	   spawn,	   {.v = screenshot } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ Mod1Mask,			XK_Tab,    rotatestack,    {.i = +1 } },
+	{ MODKEY,			XK_j,	   rotatestack,    {.i = +1 } },
 	{ MODKEY,			XK_k,      rotatestack,    {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      focusstack,     {.i = -1 } },
@@ -93,12 +95,12 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
+	{ MODKEY,                       XK_Return, zoom,           {0} }, /* move current window to master */
 	{ MODKEY,                       XK_Tab,    view,           {.i = +1 } },
 	{ MODKEY,	                XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY|ShiftMask,		XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY|ShiftMask,		XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,		XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,	                XK_f,      togglefullscr,  {0} },
@@ -119,6 +121,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_r,      quit,           {1} },
+	
+	/* XF86 media controls */
 	{ 0, XF86XK_AudioRaiseVolume,		   spawn,	   {.v = upvol } },
 	{ 0, XF86XK_AudioLowerVolume,		   spawn,	   {.v = downvol } },
 	{ 0, XF86XK_AudioMute,			   spawn,	   {.v = mutevol } },
